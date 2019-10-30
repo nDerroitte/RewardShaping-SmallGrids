@@ -1,10 +1,10 @@
-# Environmenet : 
+# Environmenet :
 
-* 10 x 10. 
+* 10 x 10.
 * 10000 itérations
 *  1000 épisodes
 
-## Sparse 
+## Sparse
 Marche bien mieux pour des plus petits environement. Très dépend du nombre d'itérations réalisé.
 
 * Reward sparse = 0
