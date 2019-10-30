@@ -97,7 +97,7 @@ class MDP:
       max = Q[index][i] if Q[index][i] > max else max
     return max
 
-  def createHistory(self, T=50, policy=None, starting_pos=None, epsilon=0.0):
+  def createHistory(self, T=50, policy=None, starting_pos=None, epsilon=0.0, PBRS = False):
       """
       Create a feasible trajectory of size T. Can be totally random or follow
       a specific policy. Can start at random or at a starting position
@@ -126,6 +126,7 @@ class MDP:
         # Initial case : start at starting position
         if t == 0:
           next_x = starting_pos
+        previous_x = next_x
 
         h.append(next_x)
 
@@ -143,13 +144,16 @@ class MDP:
 
         next_x = getIndexFromMatrix(action, self.__grid.matrix, next_x)
         # Adding the reward for going to the next x
-        h.append(self.__grid.getRewardIndex(next_x))
+        if PBRS :
+            h.append(self.__gamma * self.__grid.getRewardIndex(next_x) - self.__grid.getRewardIndex(previous_x))
+        else:
+            h.append(self.__grid.getRewardIndex(next_x))
       # Adding xt, the last position
       h.append(next_x)
       return h
 
 
-  def getQlearning(self, nb_episodes, T, epsilon):
+  def getQlearning(self, nb_episodes, T, epsilon, PBRS = False):
     """
     Estimate Q using the Q_learning algorithm.
 
@@ -175,10 +179,10 @@ class MDP:
     for k in range(nb_episodes):
       # Getting a trajectory following the current Q computed
       s = 0
-      r = 0
+      r_tot = 0
       for t in range(T):
-        exp = self.createHistory(1, policy, s, epsilon)
-        r += exp[2]
+        exp = self.createHistory(1, policy, s, epsilon, PBRS)
+        r_tot += exp[2]
         next_s = exp[3]
         if self.batch.isFull():
           for h in random.sample(self.batch.batch, self.batch_size):
@@ -196,7 +200,7 @@ class MDP:
         s = next_s
         if s == self.__grid.end_pos_index:
           break
-      #print("Episode {} ended with reward {} after {} steps. Espilon is equals to {}".format(k, r, t+1, epsilon))
+      #print("Episode {} ended with reward {} after {} steps. Espilon is equals to {}".format(k, r_tot, t+1, epsilon))
       epsilon -= (epsilon_max/nb_episodes)
 
     return Q

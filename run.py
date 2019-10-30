@@ -68,10 +68,26 @@ if __name__ == "__main__":
         default=5
     )
 
+    # Parts
+    parser.add_argument(
+        '--part',
+        help='Part of the code to launch. 0 is all',
+        type=int,
+        default=0
+    )
+
+    # batch_size
+    parser.add_argument(
+        '--batch_size',
+        help='Size of the batch',
+        type=int,
+        default=1000
+    )
     # Parsing the arguments
     args = parser.parse_args()
     nb_iterations = args.nb_iterations
     t = args.t
+    part = args.part
     size = args.size
     gamma = args.discount_factor
     epsilon = args.epsilon
@@ -83,40 +99,62 @@ if __name__ == "__main__":
         "the number of episodes should be +.")
         exit()
 
-    print("Part 1. Using sparse reward.")
-    print("Learning ..", end = ' ')
-    agent = Agent(gamma, size=size, reward = "sparse")
-    mdp = MDP(discount_factor=gamma, learning_ratio=alpha, b_s=1000,size=size, reward = "sparse")
-    # Computing Q
-    Q = mdp.getQlearning(nb_episodes, t, epsilon)
+    if part == 1 or part == 0:
+        print("Part 1. Using sparse reward.")
+        print("Learning ..", end = ' ')
+        agent = Agent(gamma, size=size, reward = "sparse")
+        mdp = MDP(discount_factor=gamma, learning_ratio=alpha, b_s=1000,size=size, reward = "sparse")
+        # Computing Q
+        Q = mdp.getQlearning(nb_episodes, t, epsilon)
 
-    # Computing the estimated optimal policy for the Q computed
-    opt_policy = mdp.getPolicyFromQ(Q)
-    print("done!")
+        # Computing the estimated optimal policy for the Q computed
+        opt_policy = mdp.getPolicyFromQ(Q)
+        print("done!")
 
-    # Corresponding ^JN
-    J = agent.computeJ(opt_policy, nb_iterations, display=False)
-    J_0 = J[0][0]
-    print("Expected discounted cumultative reward : {}".format(J_0))
-    print("Running a episode:")
-    agent.followPolicy(opt_policy, N=t, display = False)
-    print("Part2. Heuristic")
-    print("Learning ..", end = ' ')
-    agent = Agent(gamma, size=size, reward = "heuristic")
-    mdp = MDP(discount_factor=gamma, learning_ratio=alpha, b_s=1000,size=size, reward = "heuristic")
-    # Computing Q
-    Q = mdp.getQlearning(nb_episodes, t, epsilon)
+        # Corresponding ^JN
+        J = agent.computeJ(opt_policy, nb_iterations, display=False)
+        J_0 = J[0][0]
+        print("Expected discounted cumultative reward : {}".format(J_0))
+        print("Running a episode:")
+        agent.followPolicy(opt_policy, N=t, display = False)
+    if part == 2 or part == 0:
+        # =====================================================================
+        print("Part2. Heuristic")
+        print("Learning ..", end = ' ')
+        agent = Agent(gamma, size=size, reward = "heuristic")
+        mdp = MDP(discount_factor=gamma, learning_ratio=alpha, b_s=1000,size=size, reward = "heuristic")
+        # Computing Q
+        Q = mdp.getQlearning(nb_episodes, t, epsilon)
 
-    # Computing the estimated optimal policy for the Q computed
-    opt_policy = mdp.getPolicyFromQ(Q)
-    print("done!")
+        # Computing the estimated optimal policy for the Q computed
+        opt_policy = mdp.getPolicyFromQ(Q)
+        print("done!")
 
-    # Corresponding ^JN
-    J = agent.computeJ(opt_policy, nb_iterations, display=False)
-    J_0 = J[0][0]
-    print("Expected discounted cumultative reward : {}".format(J_0))
-    print("Running a episode:")
-    agent.followPolicy(opt_policy, N=t, display = True)
+        # Corresponding ^JN
+        J = agent.computeJ(opt_policy, nb_iterations, display=False)
+        J_0 = J[0][0]
+        print("Expected discounted cumultative reward : {}".format(J_0))
+        print("Running a episode:")
+        agent.followPolicy(opt_policy, N=t, display = True)
+    if part == 3 or part == 0:
+        # =====================================================================
+        print("Part3. Heuristic")
+        print("Learning ..", end = ' ')
+        agent = Agent(gamma, size=size, reward = "heuristic")
+        mdp = MDP(discount_factor=gamma, learning_ratio=alpha, b_s=1000,size=size, reward = "heuristic")
+        # Computing Q
+        Q = mdp.getQlearning(nb_episodes, t, epsilon, PBRS = True)
+
+        # Computing the estimated optimal policy for the Q computed
+        opt_policy = mdp.getPolicyFromQ(Q)
+        print("done!")
+
+        # Corresponding ^JN
+        J = agent.computeJ(opt_policy, nb_iterations, display=False)
+        J_0 = J[0][0]
+        print("Expected discounted cumultative reward : {}".format(J_0))
+        print("Running a episode:")
+        agent.followPolicy(opt_policy, N=t, display = True)
 
 
 
