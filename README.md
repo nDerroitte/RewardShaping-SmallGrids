@@ -1,10 +1,10 @@
-# Environmenet : 
+# Environmenet :
 
-* 10 x 10. 
+* 10 x 10.
 * 10000 itérations
 *  1000 épisodes
 
-## Sparse 
+## Sparse
 Marche bien mieux pour des plus petits environement. Très dépend du nombre d'itérations réalisé.
 
 * Reward sparse = 0
@@ -22,10 +22,11 @@ Reward plus grand attribué à la dernière étape.
 * Temps exec : 5.49 sec
 	* Arrive particulièrement quand la solution est difficile à trouver. Si on a une taille plus grand, il va se caler contre un mur et répéter la même étape..
 	* Excatement comme prévu, pour size = 100, il fait une boucle de 4 étapes dans les valeurs optimales en bas a droite : **Haut > droite > Bas > gauche > ..**
+	
 ![first](Images/heuri_stuck_2_1.png) ![2](Images/heuri_stuck_2_2.png) ![3](Images/heuri_stuck_2_3.png) ![4](Images/heuri_stuck_2_4.png)
 * La end position est bel et bien exploré mais elle n'est pas choisie.
 
-## PBRS 
+## PBRS
 On utilise l'heuristic mais on applique le PBRS
 
 Résultat impressionnant :
