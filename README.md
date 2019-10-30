@@ -1,4 +1,4 @@
-# Environmenet : 
+# Environmenet :
 
 * 10 x 10. 10000 itérations, 1000 épisodes
 * Reward sparse = 0
