@@ -1,13 +1,16 @@
-# Environmenet :
+# Environmenet : 
 
-* 10 x 10.
+* 10 x 10. 
 * 10000 itérations
 *  1000 épisodes
 
-## Sparse
+## Sparse 
 Marche bien mieux pour des plus petits environement. Très dépend du nombre d'itérations réalisé.
 
 * Reward sparse = 0
+* Pas de chemin optimal trouvé
+* 51 sec de passé.
+* End position pas toujours explorée
 
 ## Heuristics
 Heuristics utilisé: mahantan distance inversé pour que le plus proche de la fin soit le mieux.
@@ -16,7 +19,18 @@ Reward plus grand attribué à la dernière étape.
 
 * Reward heuristics = 169864. Mais pas d'optimal policy trouvé. Ils préfèrent stagner à l'avant derniere :
 ![log](Images/heuri_stuck_1.png)
+* Temps exec : 5.49 sec
 	* Arrive particulièrement quand la solution est difficile à trouver. Si on a une taille plus grand, il va se caler contre un mur et répéter la même étape..
 	* Excatement comme prévu, pour size = 100, il fait une boucle de 4 étapes dans les valeurs optimales en bas a droite : **Haut > droite > Bas > gauche > ..**
-	
 ![first](Images/heuri_stuck_2_1.png) ![2](Images/heuri_stuck_2_2.png) ![3](Images/heuri_stuck_2_3.png) ![4](Images/heuri_stuck_2_4.png)
+* La end position est bel et bien exploré mais elle n'est pas choisie.
+
+## PBRS 
+On utilise l'heuristic mais on applique le PBRS
+
+Résultat impressionnant :
+
+* Reward = maximale
+* Temps d'exécution : 1.86 sec
+* Chemin optimale trouvé.
+* End position évidement explorée.
