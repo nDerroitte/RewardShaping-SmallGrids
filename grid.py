@@ -52,6 +52,8 @@ class Grid:
         elif self.__reward == "heuristic":
             if [x, y] == self.__end_pos:
                 return 1000
+            if [x, y] == [0, self.height-1]:
+                return 500
             else:
                 # Reward qui minimise la mahantan distance
                 r = (abs(0 - x) + abs(0 - y))

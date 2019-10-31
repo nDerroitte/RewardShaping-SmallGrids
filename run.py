@@ -131,7 +131,7 @@ if __name__ == "__main__":
         print("done!")
 
         # Corresponding ^JN
-        J = agent.computeJ(opt_policy, nb_iterations, display=False)
+        J = agent.computeJ(opt_policy, nb_iterations, display=True)
         J_0 = J[0][0]
         print("Expected discounted cumultative reward : {}".format(J_0))
         print("Running a episode:")
