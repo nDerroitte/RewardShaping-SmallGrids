@@ -1,5 +1,6 @@
 import random
-
+import pygame
+import time
 ###############################################################################
 #                               Constants                                     #
 ###############################################################################
@@ -28,7 +29,8 @@ class Grid:
         self.end_pos_index = size*size - 1
         self.__agent_pos = self.__init_pos
         self.__reward = reward
-        self.__first_visit_inter_reward = 0
+        self.__gui_window = None
+        self.__gui_size = 600
 
     def print(self):
         """
@@ -39,15 +41,38 @@ class Grid:
             for x in range(self.width):
                 # Case where the agent is located on the current cell
                 if [x, y] == self.__agent_pos:
-                    print((str(self.getReward(x,y, True))+"*").rjust(4), end='')
+                    print((str(self.getReward(x,y))+"*").rjust(4), end='')
                 else:
-                    print(str(self.getReward(x,y, True)).rjust(4), end='')
+                    print(str(self.getReward(x,y)).rjust(4), end='')
             # Line break
             print(" ")
 
-    def resetReward(self):
-        self.__first_visit_inter_reward = 0
-        
+    def __initGUI(self):
+        pygame.init()
+        window_size = (self.__gui_size,self.__gui_size)
+        self.__gui_window = pygame.display.set_mode(window_size)
+
+    def __drawCell(self, x, y):
+        delta_x = (self.__gui_size-40) / self.width
+        delta_y = (self.__gui_size-40) / self.height
+        x1, y1 = [round(20 + (x * delta_x)), round(20 + (y * delta_y))]
+        if [x, y] == [self.width -1, self.height-1]:
+            pygame.draw.rect(self.__gui_window,(102,255,102),((x1,y1),(delta_x, delta_y)), 0)
+            pygame.draw.rect(self.__gui_window,(0,0,0),((x1,y1),(delta_x, delta_y)), 2)
+        else:
+            pygame.draw.rect(self.__gui_window,(0,0,0),((x1,y1),(delta_x, delta_y)), 2)
+        if [x, y] == self.__agent_pos:
+            pygame.draw.circle(self.__gui_window,(255,0,0), (round(x1 + delta_x /2), round(y1 + delta_y/2)), round(0.8 * delta_x/2), 0)
+
+    def printGUI(self):
+        if self.__gui_window is None:
+            self.__initGUI()
+        self.__gui_window.fill((135,200,255))
+        for x in range(self.width):
+            for y in range(self.height):
+                self.__drawCell(x, y)
+        pygame.display.flip()
+
     def getReward(self, x, y, display=False):
         if self.__reward == "sparse":
             if [x, y] == self.__end_pos:
@@ -56,10 +81,6 @@ class Grid:
                 return 0
         elif self.__reward == "heuristic":
             if [x, y] == self.__end_pos:
-                return 1000
-            if [x, y] == [0, self.height-1] and self.__first_visit_inter_reward == 0:
-                if not display:
-                    self.__first_visit_inter_reward = 1
                 return 500
             else:
                 # Reward qui minimise la mahantan distance

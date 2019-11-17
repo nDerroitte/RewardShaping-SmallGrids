@@ -180,16 +180,10 @@ class MDP:
       # Getting a trajectory following the current Q computed
       s = 0
       r_tot = 0
-      first_time = 1
       for t in range(T):
         exp = self.createHistory(1, policy, s, epsilon, PBRS)
         r_tot += exp[2]
         next_s = exp[3]
-        if s == 90 and first_time:
-          print("reward  apres: ",exp[2])
-          first_time = 0
-        if next_s == 90 and first_time:
-          print("reward : ",exp[2])
         if self.batch.isFull():
           for h in random.sample(self.batch.batch, self.batch_size):
             x = h[0]
@@ -206,7 +200,6 @@ class MDP:
         s = next_s
         if s == self.__grid.end_pos_index:
           break
-      self.__grid.resetReward()
       #print("Episode {} ended with reward {} after {} steps. Espilon is equals to {}".format(k, r_tot, t+1, epsilon))
       epsilon -= (epsilon_max/nb_episodes)
 

@@ -1,4 +1,5 @@
 import math
+import time
 from copy import copy, deepcopy
 from grid import *
 
@@ -35,6 +36,8 @@ class Agent:
         if display:
             print("Initial grid : ")
             self.__grid.print()
+            self.__grid.printGUI()
+            time.sleep(5)
 
         agent_pos_index = 0
         reward = 0
@@ -52,6 +55,8 @@ class Agent:
             j += self.__grid.getRewardIndex(agent_pos_index) * pow(discount_factor, i)
             if display:
                 self.__grid.print()
+                self.__grid.printGUI()
+                time.sleep(0.25)
             if agent_pos_index == self.__grid.end_pos_index:
                 break
 
@@ -117,7 +122,6 @@ class Agent:
                     print(" ")
             # Preparing next iterations by setting the matrix Jn as Jn-1
             previous_Jmatrix = deepcopy(current_Jmatrix)
-            self.__grid.resetReward()
         # Returning last J computed
         return current_Jmatrix
 
