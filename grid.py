@@ -28,22 +28,27 @@ class Grid:
         self.end_pos_index = size*size - 1
         self.__agent_pos = self.__init_pos
         self.__reward = reward
+        self.__first_visit_inter_reward = 0
 
     def print(self):
         """
         Display the reward grid where the agent is located by a *
         """
+
         for y in range(self.height):
             for x in range(self.width):
                 # Case where the agent is located on the current cell
                 if [x, y] == self.__agent_pos:
-                    print((str(self.getReward(x,y))+"*").rjust(4), end='')
+                    print((str(self.getReward(x,y, True))+"*").rjust(4), end='')
                 else:
-                    print(str(self.getReward(x,y)).rjust(4), end='')
+                    print(str(self.getReward(x,y, True)).rjust(4), end='')
             # Line break
             print(" ")
 
-    def getReward(self, x, y):
+    def resetReward(self):
+        self.__first_visit_inter_reward = 0
+        
+    def getReward(self, x, y, display=False):
         if self.__reward == "sparse":
             if [x, y] == self.__end_pos:
                 return 1
@@ -52,7 +57,9 @@ class Grid:
         elif self.__reward == "heuristic":
             if [x, y] == self.__end_pos:
                 return 1000
-            if [x, y] == [0, self.height-1]:
+            if [x, y] == [0, self.height-1] and self.__first_visit_inter_reward == 0:
+                if not display:
+                    self.__first_visit_inter_reward = 1
                 return 500
             else:
                 # Reward qui minimise la mahantan distance

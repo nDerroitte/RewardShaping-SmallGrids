@@ -117,6 +117,7 @@ class Agent:
                     print(" ")
             # Preparing next iterations by setting the matrix Jn as Jn-1
             previous_Jmatrix = deepcopy(current_Jmatrix)
+            self.__grid.resetReward()
         # Returning last J computed
         return current_Jmatrix
 

@@ -51,3 +51,18 @@ Résultat impressionnant :
 * Temps d'exécution : 1.86 sec
 * Chemin optimale trouvé.
 * End position évidement explorée.
+
+## Cas où on met une reward de 500 dans la grille
+
+### Heuristics
+Avec assez d'exploration, va bouclé dessus, logiquo logique!
+
+### PBRS
+
+Meme si l'état est exploré, il n'est pas choisis forcément. Pourquoi?
+Car le gradient va être ultra positif dans un sens mais ultra négatif dans l'autre sens.. Donc pas rentable.
+
+Le PBRS est utile seulement lorsqu'on s'approche graduellement vers la reward.
+Une solution est de mettre la reward à normale une fois que l'état a été exploré.
+
+Ne marche pas pour some reasons. A explorer ..
